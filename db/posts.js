@@ -32,7 +32,7 @@ async function getPosts() {
     try {
         const { data, error } = await supabase
             .from('posts')
-            .select('*, comment(id,comment_content,upvote,downvote,user_id, table_name(name,user_image),upvotes_downvotes(id,comment_id,value)),table_name(name,user_image),likes_dislikes(id,user_id,value)')
+            .select('*, comment(id,comment_content,upvote,downvote,user_id, table_name(name,user_image),upvotes_downvotes(id,user_id,value)),table_name(name,user_image),likes_dislikes(id,user_id,value)')
             .order('updated_at', { ascending: false });
         if (error) throw error
         return data
@@ -44,7 +44,6 @@ async function toggleLikeDislikeInPost(post_id, value, prev) {
     let function_name = "";
     let column_name1 = "";
     let column_name2 = "";
-    console.log(prev, value);
     if (value == 1 && prev == 0) {
         function_name = "increment_column_value";
         column_name1 = "likes";
@@ -76,7 +75,7 @@ async function toggleLikeDislikeInPost(post_id, value, prev) {
             column_name1 = "likes"
         }
         else {
-            function_name = "decrement_column_value";
+            function_name = "increment_column_value";
             column_name1 = "dislikes";
         }
     }
@@ -93,7 +92,7 @@ async function toggleLikeDislikeInPost(post_id, value, prev) {
                 throw error;
             }
 
-            console.log('Column value incremented successfully.');
+            console.log('Column value updated successfully.');
         } catch (error) {
             console.error('Error calling increment_column_value function:', error);
         }

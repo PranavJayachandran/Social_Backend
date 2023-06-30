@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const { getUserData } = require('./db/userData');
 const { addPosts, getPosts, toggleLikeDislikeInPost } = require('./db/posts');
-const { addComment, getComment, addCommentToPost } = require('./db/comment');
+const { addComment, getComment, addCommentToPost, toggleUpvotesDownvotesInComment } = require('./db/comment');
 const { addLikesDislikes, toggleLikeDislike } = require('./db/likes_dislikes');
 const { addUpvotesDownVotes, toggleUpvotesDownvotes } = require('./db/upvotes_downvotes');
 
@@ -65,6 +65,8 @@ app.post("/upvotesdownvotes", async (req, res) => {
     let comment_id = req.body.comment_id;
     let value = req.body.value;
     let user_id = req.body.user_id;
+    let prev = req.body.prev;
+    await toggleUpvotesDownvotesInComment(comment_id, value, prev);
     let id = await addUpvotesDownVotes(comment_id, value, user_id)
     res.send(JSON.stringify(id));
 })
@@ -73,6 +75,8 @@ app.put("/upvotesdownvotes", async (req, res) => {
     let comment_id = req.body.comment_id;
     let value = req.body.value;
     let user_id = req.body.user_id;
+    let prev = req.body.prev;
+    await toggleUpvotesDownvotesInComment(comment_id, value, prev);
     await toggleUpvotesDownvotes(comment_id, value, user_id)
     res.send("Done");
 })
