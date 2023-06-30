@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { getUserData } = require('./db/userData');
-const { addPosts, getPosts } = require('./db/posts');
+const { addPosts, getPosts, toggleLikeDislikeInPost } = require('./db/posts');
 const { addComment, getComment, addCommentToPost } = require('./db/comment');
 const { addLikesDislikes, toggleLikeDislike } = require('./db/likes_dislikes');
 const { addUpvotesDownVotes, toggleUpvotesDownvotes } = require('./db/upvotes_downvotes');
@@ -45,6 +45,8 @@ app.post("/likesdislikes", async (req, res) => {
     let post_id = req.body.post_id;
     let value = req.body.value;
     let user_id = req.body.user_id;
+    let prev = req.body.prev;
+    await toggleLikeDislikeInPost(post_id, value, prev);
     let id = await addLikesDislikes(post_id, value, user_id)
     res.send(JSON.stringify(id));
 })
@@ -53,6 +55,8 @@ app.put("/likesdislikes", async (req, res) => {
     let post_id = req.body.post_id;
     let value = req.body.value;
     let user_id = req.body.user_id;
+    let prev = req.body.prev;
+    await toggleLikeDislikeInPost(post_id, value, prev);
     await toggleLikeDislike(post_id, value, user_id)
     res.send("Done");
 })
