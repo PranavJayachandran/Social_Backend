@@ -92,9 +92,8 @@ app.post("/community", async (req, res) => {
     let id = await addCommunity(cover_image, banner_image, description, name);
     res.send(JSON.stringify(id))
 })
-app.post("/communities", async (req, res) => {
-    const user_communities = req.body.user_communities;
-    var communities = await getCommunities(user_communities);
+app.get("/communities", async (req, res) => {
+    var communities = await getCommunities();
     res.send(communities)
 })
 

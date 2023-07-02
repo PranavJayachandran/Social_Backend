@@ -27,15 +27,13 @@ async function addCommunity(cover_image, banner_image, description, name) {
 
 
 
-async function getCommunities(user_communities) {
-    let posts;
+async function getCommunities() {
     try {
         const { data, error } = await supabase
             .from('community')
             .select('*')
             .order('updated_at', { ascending: false })
-            .not('id', 'in', '(1)');
-        ;
+            ;
 
         if (error) throw error
         return data

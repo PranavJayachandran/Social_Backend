@@ -8,7 +8,7 @@ async function getUserData(id) {
             .eq('id', id)
 
         if (error) throw error
-        return data
+        return data[0]
     } catch (error) {
         console.error(error)
     }
