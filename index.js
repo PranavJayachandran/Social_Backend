@@ -6,7 +6,7 @@ const { addPosts, getPosts, toggleLikeDislikeInPost } = require('./db/posts');
 const { addComment, getComment, addCommentToPost, toggleUpvotesDownvotesInComment } = require('./db/comment');
 const { addLikesDislikes, toggleLikeDislike } = require('./db/likes_dislikes');
 const { addUpvotesDownVotes, toggleUpvotesDownvotes } = require('./db/upvotes_downvotes');
-const { getCommunities, addCommunity } = require('./db/community');
+const { getCommunities, addCommunity, addCommunityToUser, toggleMembersInCommunity } = require('./db/community');
 
 
 const app = express()
@@ -92,9 +92,17 @@ app.post("/community", async (req, res) => {
     let id = await addCommunity(cover_image, banner_image, description, name);
     res.send(JSON.stringify(id))
 })
-app.get("/communities", async (req, res) => {
-    var communities = await getCommunities();
+app.post("/communities", async (req, res) => {
+    const user_communities = req.body.user_communities;
+    var communities = await getCommunities(user_communities);
     res.send(communities)
+})
+
+app.post("/communitytouser", async (req, res) => {
+    let { user_id, community_id } = req.body
+    let id = await addCommunityToUser(user_id, community_id);
+    await toggleMembersInCommunity(community_id, "increment_column_value");
+    res.send(JSON.stringify(id))
 })
 
 app.listen(5000, () => console.log("at 5000"));

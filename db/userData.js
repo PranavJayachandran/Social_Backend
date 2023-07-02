@@ -4,7 +4,7 @@ async function getUserData(id) {
     try {
         const { data, error } = await supabase
             .from('table_name')
-            .select('*')
+            .select('* ,community_to_user(community_id)')
             .eq('id', id)
 
         if (error) throw error

@@ -27,18 +27,55 @@ async function addCommunity(cover_image, banner_image, description, name) {
 
 
 
-async function getCommunities() {
+async function getCommunities(user_communities) {
     let posts;
     try {
         const { data, error } = await supabase
             .from('community')
             .select('*')
-            .order('updated_at', { ascending: false });
+            .order('updated_at', { ascending: false })
+            .not('id', 'in', '(1)');
+        ;
+
         if (error) throw error
         return data
     } catch (error) {
         console.error(error)
     }
 }
+async function addCommunityToUser(user_id, community_id) {
+    try {
+        const { data, error } = await supabase
+            .from('community_to_user')
+            .insert([
+                {
+                    user_id: user_id,
+                    community_id: community_id
+                }
+            ])
 
-module.exports = { addCommunity, getCommunities }
+        if (error) throw error
+        return data
+    } catch (error) {
+        console.error(error)
+    }
+}
+async function toggleMembersInCommunity(community_id, function_name) {
+    try {
+        const { data, error } = await supabase.rpc(function_name, {
+            table_name: 'community',
+            column_name: "members",
+            condition: `id = ${community_id}`,
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        console.log('Column value successfully.', function_name);
+    } catch (error) {
+        console.error('Error calling function:', function_name, error);
+    }
+}
+
+module.exports = { addCommunity, getCommunities, addCommunityToUser, toggleMembersInCommunity }
