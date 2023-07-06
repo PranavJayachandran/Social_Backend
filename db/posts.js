@@ -1,6 +1,4 @@
-const { mapComments } = require("./comment");
 const { supabase } = require("./db_client");
-const { mapUser } = require("./userData");
 
 async function addPosts(content, user_id) {
     try {
@@ -32,12 +30,12 @@ async function getPosts() {
     try {
         const { data, error } = await supabase
             .from('posts')
-            .select('*, comment(id,comment_content,upvote,downvote,user_id, table_name(name,user_image),upvotes_downvotes(id,user_id,value)),table_name(name,user_image),likes_dislikes(id,user_id,value)')
-            .order('updated_at', { ascending: false });
+            .select('*')
+
         if (error) throw error
         return data
     } catch (error) {
-        console.error(error)
+        console.error("Errorr", error)
     }
 }
 async function toggleLikeDislikeInPost(post_id, value, prev) {
