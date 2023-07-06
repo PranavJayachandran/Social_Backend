@@ -29,7 +29,7 @@ async function getPosts() {
     let posts;
     try {
         const { data, error } = await supabase
-            .from('posts')
+            .from('q')
             .select('*')
 
         if (error) throw error
