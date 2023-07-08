@@ -21,7 +21,13 @@ const {
   toggleMembersInCommunity,
   removeUserfromCommunity,
 } = require("./db/community");
-const { getEvent, addEvent } = require("./db/event");
+const {
+  getEvent,
+  addEvent,
+  getEventByCommunity,
+  joinUserToEvent,
+  getAllEvent,
+} = require("./db/event");
 
 const app = express();
 app.use(express.json());
@@ -125,13 +131,25 @@ app.delete("/communitytouser", async (req, res) => {
 });
 
 app.post("/event", async (req, res) => {
-  let { community_id, name, description, date} = req.body;
+  let { community_id, name, description, date } = req.body;
   let id = await addEvent(community_id, name, description, date);
   res.send(JSON.stringify(id));
 });
 app.get("/event", async (req, res) => {
-  var events = await getEvent();
+  var events = await getAllEvent();
   res.send(events);
 });
-
+app.get("/event/:id", async (req, res) => {
+  let community_id = req.params.id;
+  res.send(await getEvent(community_id));
+});
+app.get("/eventcommunity/:id", async (req, res) => {
+  let community_id = req.params.id;
+  res.send(await getEventByCommunity(community_id));
+});
+app.post("/joinevent", async (req, res) => {
+  let { event_id, user_id } = req.body;
+  await joinUserToEvent(event_id, user_id);
+  res.send("Done");
+});
 app.listen(5000, () => console.log("at 5000"));
