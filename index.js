@@ -27,6 +27,7 @@ const {
   getEventByCommunity,
   joinUserToEvent,
   getAllEvent,
+  removeUserFromEvent,
 } = require("./db/event");
 
 const app = express();
@@ -101,11 +102,11 @@ app.put("/upvotesdownvotes", async (req, res) => {
   await toggleUpvotesDownvotes(comment_id, value, user_id);
   res.send("Done");
 });
-// app.post("/commenttopost", async (req, res) => {
-//     let { content, post_id } = req.body;
-//     await addComment(content, post_id);
-//     res.send("done");
-// })
+app.post("/commenttopost", async (req, res) => {
+  let { content, post_id } = req.body;
+  await addComment(content, post_id);
+  res.send("done");
+});
 
 app.post("/community", async (req, res) => {
   let { cover_image, banner_image, description, name } = req.body;
@@ -135,7 +136,7 @@ app.post("/event", async (req, res) => {
   let id = await addEvent(community_id, name, description, date);
   res.send(JSON.stringify(id));
 });
-app.get("/event", async (req, res) => {
+app.get("/events", async (req, res) => {
   var events = await getAllEvent();
   res.send(events);
 });
@@ -150,6 +151,11 @@ app.get("/eventcommunity/:id", async (req, res) => {
 app.post("/joinevent", async (req, res) => {
   let { event_id, user_id } = req.body;
   await joinUserToEvent(event_id, user_id);
+  res.send("Done");
+});
+app.delete("/leaveevent", async (req, res) => {
+  let { event_id, user_id } = req.body;
+  await removeUserFromEvent(event_id, user_id);
   res.send("Done");
 });
 app.listen(5000, () => console.log("at 5000"));

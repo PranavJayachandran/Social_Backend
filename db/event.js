@@ -76,10 +76,23 @@ const joinUserToEvent = async (event_id, user_id) => {
     console.error("Errorr", error);
   }
 };
+
+const removeUserFromEvent = async (event_id, user_id) => {
+  try {
+    const { data, error } = await supabase
+      .from("event_to_user")
+      .delete()
+      .match({ user_id: user_id })
+      .match({ event_id: event_id });
+  } catch (error) {
+    console.error(error);
+  }
+};
 module.exports = {
   addEvent,
   getAllEvent,
   getEvent,
   getEventByCommunity,
   joinUserToEvent,
+  removeUserFromEvent,
 };
