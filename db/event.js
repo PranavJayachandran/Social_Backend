@@ -25,7 +25,7 @@ async function getAllEvent() {
   try {
     const { data, error } = await supabase
       .from("events")
-      .select("*")
+      .select("*,community(name)")
       .order("updated_at", { ascending: false });
 
     if (error) throw error;
