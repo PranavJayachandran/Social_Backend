@@ -5,7 +5,7 @@ async function getUserData(id) {
     const { data, error } = await supabase
       .from("table_name")
       .select(
-        "name,interests,socials,user_image ,event_to_user(event_id) ,community_to_user(community_id,community(*))"
+        "id,name,interests,socials,user_image ,event_to_user(event_id) ,community_to_user(community_id,community(*))"
       )
       .eq("id", id);
 
@@ -56,4 +56,25 @@ async function CreateUser(email, id) {
   }
 }
 
-module.exports = { getUserData, mapUser, CreateUser };
+async function UpdateUser(id, name, interests, socials, user_image) {
+  try {
+    const { data, error } = await supabase
+      .from("table_name")
+      .update([
+        {
+          name: name,
+          socials: socials,
+          interests: interests,
+          user_image: user_image
+        },
+      ])
+      .eq('id', id);
+
+    if (error) throw error;
+    return "Done"
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+module.exports = { getUserData, mapUser, CreateUser, UpdateUser };

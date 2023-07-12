@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { getUserData, SignUp, CreateUser } = require("./db/userData");
+const { getUserData, SignUp, CreateUser, UpdateUser } = require("./db/userData");
 const { addPosts, getPosts, toggleLikeDislikeInPost } = require("./db/posts");
 const {
   addComment,
@@ -42,6 +42,14 @@ app.get("/userData/:id", async (req, res) => {
   let id = req.params.id;
   res.send(await getUserData(id));
 });
+app.post("/user", async (req, res) => {
+
+  let { id, name, interests, socials, user_image } = req.body;
+  console.log(id, name, interests, socials, user_image);
+  await UpdateUser(id, name, interests, socials, user_image);
+  return res.send("User Updated");
+});
+
 
 app.post("/createUser", async (req, res) => {
   let { email, id } = req.body;
