@@ -3,7 +3,7 @@ const { supabase } = require("./db_client");
 async function getUserData(id) {
   try {
     const { data, error } = await supabase
-      .from("table_name")
+      .from("users")
       .select(
         "id,name,interests,socials,user_image ,event_to_user(event_id) ,community_to_user(community_id,community(*))"
       )
@@ -20,7 +20,7 @@ async function mapUser(posts) {
   const asyncTasks = posts.map(async (item) => {
     try {
       const { data, error } = await supabase
-        .from("table_name")
+        .from("users")
         .select("name,user_image")
         .eq("id", item.user_id);
       if (error) throw error;
@@ -40,7 +40,7 @@ async function mapUser(posts) {
 async function CreateUser(email, id) {
   try {
     const { data, error } = await supabase
-      .from("table_name")
+      .from("users")
       .insert([
         {
           id: id,
@@ -59,7 +59,7 @@ async function CreateUser(email, id) {
 async function UpdateUser(id, name, interests, socials, user_image) {
   try {
     const { data, error } = await supabase
-      .from("table_name")
+      .from("users")
       .update([
         {
           name: name,

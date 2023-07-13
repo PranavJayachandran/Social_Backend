@@ -10,7 +10,6 @@ async function addPosts(content, user_id) {
           user_id: user_id,
           likes: 0,
           dislikes: 0,
-          comment_id: [],
         },
       ])
       .select("id");
@@ -23,12 +22,11 @@ async function addPosts(content, user_id) {
 }
 
 async function getPosts() {
-  let posts;
   try {
     const { data, error } = await supabase
       .from("posts")
       .select(
-        "*, comment(id,comment_content,upvote,downvote,user_id, table_name(name,user_image),upvotes_downvotes(id,user_id,value)),table_name(name,user_image),likes_dislikes(id,user_id,value)"
+        "*, comment(id,comment_content,upvote,downvote,user_id, users(name,user_image),upvotes_downvotes(id,user_id,value)),users(name,user_image),likes_dislikes(id,user_id,value)"
       )
       .order("updated_at", { ascending: false });
 

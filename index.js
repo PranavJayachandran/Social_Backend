@@ -54,8 +54,7 @@ app.post("/user", async (req, res) => {
 app.post("/createUser", async (req, res) => {
   let { email, id } = req.body;
   let user = await CreateUser(email, id);
-  console.log("R", user);
-  return res.send("User Created");
+  return res.send(user);
 });
 
 app.post("/post", async (req, res) => {
