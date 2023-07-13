@@ -26,7 +26,7 @@ async function getPosts() {
     const { data, error } = await supabase
       .from("posts")
       .select(
-        "*, comment(id,comment_content,upvote,downvote,user_id, users(name,user_image),upvotes_downvotes(id,user_id,value)),users(name,user_image),likes_dislikes(id,user_id,value)"
+        "*, comments(id,comment_content,upvote,downvote,user_id, users(name,user_image),upvotes_downvotes(id,user_id,value)),users(name,user_image),likes_dislikes(id,user_id,value)"
       )
       .order("updated_at", { ascending: false });
 

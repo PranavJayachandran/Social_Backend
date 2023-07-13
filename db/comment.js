@@ -3,7 +3,7 @@ const { supabase } = require("./db_client");
 async function addComment(content, user_id, post_id) {
     try {
         const { data, error } = await supabase
-            .from('comment')
+            .from('comments')
             .insert([
                 {
                     comment_content: content,
@@ -25,7 +25,7 @@ async function addComment(content, user_id, post_id) {
 async function getComment(id) {
     try {
         const { data, error } = await supabase
-            .from('comment')
+            .from('comments')
             .select('*')
             .eq('id', id)
         if (error) throw error
@@ -88,7 +88,7 @@ async function toggleUpvotesDownvotesInComment(comment_id, value, prev) {
     if (function_name == "update_columns") {
         try {
             const { data, error } = await supabase.rpc(function_name, {
-                table_name: 'comment',
+                table_name: 'comments',
                 column1_name: column_name1,
                 column2_name: column_name2,
                 condition: `id = ${comment_id}`,
@@ -106,7 +106,7 @@ async function toggleUpvotesDownvotesInComment(comment_id, value, prev) {
     else if (function_name == "increment_column_value" || function_name == "decrement_column_value") {
         try {
             const { data, error } = await supabase.rpc(function_name, {
-                table_name: 'comment',
+                table_name: 'comments',
                 column_name: column_name1,
                 condition: `id = ${comment_id}`,
             });
