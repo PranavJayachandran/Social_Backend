@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { getUserData, SignUp, CreateUser, UpdateUser } = require("./db/userData");
+const { getUserData, SignUp, CreateUser, UpdateUser, getAllUsers } = require("./db/userData");
 const { addPosts, getPosts, toggleLikeDislikeInPost } = require("./db/posts");
 const {
   addComment,
@@ -29,6 +29,7 @@ const {
   getAllEvent,
   removeUserFromEvent,
 } = require("./db/event");
+const { AddFriend, getFrinds } = require("./db/friend");
 
 const app = express();
 app.use(express.json());
@@ -42,6 +43,10 @@ app.get("/userData/:id", async (req, res) => {
   let id = req.params.id;
   res.send(await getUserData(id));
 });
+
+app.get("/users", async (req, res) => {
+  res.send(await getAllUsers());
+})
 app.post("/user", async (req, res) => {
 
   let { id, name, interests, socials, user_image } = req.body;
@@ -173,4 +178,15 @@ app.delete("/leaveevent", async (req, res) => {
   await removeUserFromEvent(event_id, user_id);
   res.send("Done");
 });
+app.post("/friend", async (req, res) => {
+  let { friend1, friend2 } = req.body;
+  await AddFriend(friend1, friend2);
+  res.send("Friend Added");
+});
+app.post("/getfriends", async (req, res) => {
+  let { user_id } = req.body;
+  let friends = await getFrinds(user_id);
+  res.send(friends);
+});
+
 app.listen(5000, () => console.log("at 5000"));

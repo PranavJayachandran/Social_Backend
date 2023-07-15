@@ -15,6 +15,21 @@ async function getUserData(id) {
     console.error(error);
   }
 }
+
+async function getAllUsers() {
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select(
+        "id,name,user_image"
+      )
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
 async function mapUser(posts) {
   let mapped_posts = [];
   const asyncTasks = posts.map(async (item) => {
@@ -77,4 +92,4 @@ async function UpdateUser(id, name, interests, socials, user_image) {
   }
 }
 
-module.exports = { getUserData, mapUser, CreateUser, UpdateUser };
+module.exports = { getUserData, mapUser, CreateUser, UpdateUser, getAllUsers };
