@@ -22,8 +22,8 @@ async function getFriends(user_id) {
     try {
         const { data, error } = await supabase
             .from("friends")
-            .select("friend1,friend2")
-            .or(`and(friend1.eq.${user_id}),and(friend2.eq.${user_id})`)
+            .select("friend2")
+            .or(`and(friend1.eq.${user_id})`)
 
 
         if (error) throw error;
@@ -37,7 +37,7 @@ async function unFriend(friend1, friend2) {
         const { data, error } = await supabase
             .from("friends")
             .delete()
-            .or(`and(friend1.eq.${friend1},friend2.eq.${friend2}),and(friend1.eq.${friend2},friend2.eq.${friend1})`)
+            .or(`and(friend1.eq.${friend1},friend2.eq.${friend2})`)
         return "Deleted";
     } catch (error) {
         console.error(error);

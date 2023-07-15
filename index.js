@@ -180,6 +180,7 @@ app.delete("/leaveevent", async (req, res) => {
 });
 app.post("/friend", async (req, res) => {
   let { friend1, friend2 } = req.body;
+  console.log(friend1, friend2);
   await AddFriend(friend1, friend2);
   res.send("Friend Added");
 });
