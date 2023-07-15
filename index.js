@@ -29,7 +29,7 @@ const {
   getAllEvent,
   removeUserFromEvent,
 } = require("./db/event");
-const { AddFriend, getFrinds } = require("./db/friend");
+const { AddFriend, getFriends, unFriend } = require("./db/friend");
 
 const app = express();
 app.use(express.json());
@@ -185,8 +185,12 @@ app.post("/friend", async (req, res) => {
 });
 app.post("/getfriends", async (req, res) => {
   let { user_id } = req.body;
-  let friends = await getFrinds(user_id);
+  let friends = await getFriends(user_id);
   res.send(friends);
 });
+app.delete("/friend", async (req, res) => {
+  let { friend1, friend2 } = req.body;
+  res.send(await unFriend(friend1, friend2));
+})
 
 app.listen(5000, () => console.log("at 5000"));

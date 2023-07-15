@@ -18,13 +18,13 @@ async function AddFriend(friend1, friend2) {
         console.error(error);
     }
 }
-async function getFrinds(user_id) {
+async function getFriends(user_id) {
     try {
         const { data, error } = await supabase
             .from("friends")
             .select("friend1,friend2")
-            .or(`friend1.eq.${user_id}l`)
-            .or(`friend2.eq.${user_id}l`)
+            .or(`and(friend1.eq.${user_id}),and(friend2.eq.${user_id})`)
+
 
         if (error) throw error;
         return data;
@@ -32,5 +32,16 @@ async function getFrinds(user_id) {
         console.error(error);
     }
 }
+async function unFriend(friend1, friend2) {
+    try {
+        const { data, error } = await supabase
+            .from("friends")
+            .delete()
+            .or(`and(friend1.eq.${friend1},friend2.eq.${friend2}),and(friend1.eq.${friend2},friend2.eq.${friend1})`)
+        return "Deleted";
+    } catch (error) {
+        console.error(error);
+    }
+}
 
-module.exports = { AddFriend, getFrinds };
+module.exports = { AddFriend, getFriends, unFriend };
