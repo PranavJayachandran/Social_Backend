@@ -50,7 +50,6 @@ app.get("/users", async (req, res) => {
 app.post("/user", async (req, res) => {
 
   let { id, name, interests, socials, user_image } = req.body;
-  console.log(id, name, interests, socials, user_image);
   await UpdateUser(id, name, interests, socials, user_image);
   return res.send("User Updated");
 });
@@ -180,7 +179,6 @@ app.delete("/leaveevent", async (req, res) => {
 });
 app.post("/friend", async (req, res) => {
   let { friend1, friend2 } = req.body;
-  console.log(friend1, friend2);
   await AddFriend(friend1, friend2);
   res.send("Friend Added");
 });

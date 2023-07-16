@@ -72,24 +72,46 @@ async function CreateUser(email, id) {
 }
 
 async function UpdateUser(id, name, interests, socials, user_image) {
-  try {
-    const { data, error } = await supabase
-      .from("users")
-      .update([
-        {
-          name: name,
-          socials: socials,
-          interests: interests,
-          user_image: user_image
-        },
-      ])
-      .eq('id', id);
+  if (user_image != null) {
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .update([
+          {
+            name: name,
+            socials: socials,
+            interests: interests,
+            user_image: user_image
+          },
+        ])
+        .eq('id', id);
 
-    if (error) throw error;
-    return "Done"
-  } catch (error) {
-    console.error(error);
+      if (error) throw error;
+      return "Done"
+    } catch (error) {
+      console.error(error);
+    }
   }
+  else {
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .update([
+          {
+            name: name,
+            socials: socials,
+            interests: interests,
+          },
+        ])
+        .eq('id', id);
+
+      if (error) throw error;
+      return "Done"
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 }
 
 module.exports = { getUserData, mapUser, CreateUser, UpdateUser, getAllUsers };
