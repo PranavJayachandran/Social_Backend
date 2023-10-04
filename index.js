@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", async (req, res) => {
-  res.send("Server done");
+  res.send("Server up");
 });
 
 app.get("/userData/:id", async (req, res) => {
